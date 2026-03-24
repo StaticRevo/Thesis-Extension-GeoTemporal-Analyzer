@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GeoTemporal Test Page</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Segoe UI, Tahoma, sans-serif;
+            background: #f3f5f8;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 40px auto;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 1.6rem;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        input, button {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-size: 0.95rem;
+        }
+
+        button {
+            cursor: pointer;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+        }
+
+        pre {
+            background: #111827;
+            color: #e5e7eb;
+            padding: 14px;
+            border-radius: 8px;
+            min-height: 90px;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Flask Test Page</h1>
+        <p>If you can see this, <code>render_template("index.html")</code> is working.</p>
+
+        <div class="row">
+            <input id="lat" value="37.7749" placeholder="Latitude">
+            <input id="lon" value="-122.4194" placeholder="Longitude">
+            <input id="date" value="2024-01-01" placeholder="YYYY-MM-DD">
+        </div>
+
+        <button id="testBtn" type="button">Test /api/image</button>
+        <h3>Response</h3>
+        <pre id="output">Waiting for request...</pre>
+    </div>
+
+    <script>
+        const btn = document.getElementById("testBtn");
+        const output = document.getElementById("output");
+
+        btn.addEventListener("click", async () => {
+            const lat = document.getElementById("lat").value;
+            const lon = document.getElementById("lon").value;
+            const date = document.getElementById("date").value;
+
+            const url = `/api/image?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&date=${encodeURIComponent(date)}`;
+            output.textContent = `Requesting: ${url}`;
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                output.textContent = JSON.stringify(data, null, 2);
+            } catch (err) {
+                output.textContent = `Request failed: ${err}`;
+            }
+        });
+    </script>
+</body>
+</html>
