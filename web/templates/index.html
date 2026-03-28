@@ -1,19 +1,67 @@
 {% extends "base.html" %}
-
 {% block title %}Home - GeoTemporal Analyzer{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1 class="mb-4">GeoTemporal Analyzer</h1>
-    
-    <h5 class="mb-3">Choose a Date:</h5>
-    <div id="dateBar" class="date-bar mb-4"></div>
-    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
-        <div class="spinner-border text-primary" role="status"></div>
-            <p class="mt-3 mb-0">Updating map with new date...</p>
-            <small id="loadingStatus">Please wait</small>
-        </div>
-    <div id="map" style="height: 680px; border: 2px solid #555; border-radius: 8px;"></div>\
+<div class="geo-app">
+
+  <!-- Header -->
+  <div class="geo-header">
+    <div class="geo-title">
+      <span class="geo-icon">🛰</span>
+      <div>
+        <h1>GeoTemporal Analyzer</h1>
+        <p class="geo-subtitle">Explore Earth's surface through time using Sentinel-2 imagery</p>
+      </div>
+    </div>
+    <div class="geo-date-badge">
+      <span class="badge-label">VIEWING</span>
+      <span id="displayDate" class="badge-date">—</span>
+      <span id="actualDateNote" class="badge-actual"></span>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div class="map-wrapper">
+    <div id="map"></div>
+
+    <!-- Loading overlay inside map -->
+    <div id="loadingOverlay" class="map-loading" style="display:none">
+      <div class="loader-inner">
+        <div class="spinner-ring"></div>
+        <span id="loadingStatus">Fetching imagery…</span>
+      </div>
+    </div>
+
+    <!-- No-image notice -->
+    <div id="noImageNotice" class="no-image-notice" style="display:none">
+      ⚠ No clear imagery found near this date
+    </div>
+  </div>
+
+  <!-- Timeline Controls -->
+  <div class="timeline-panel">
+    <button id="playBtn" class="play-btn" title="Auto-play">▶</button>
+
+    <div class="timeline-track-wrapper">
+      <!-- Year labels -->
+      <div class="year-labels" id="yearLabels"></div>
+      <!-- The slider -->
+      <input type="range" id="timelineSlider" class="timeline-slider" min="0" value="0">
+      <!-- Tick marks -->
+      <div class="timeline-ticks" id="timelineTicks"></div>
+    </div>
+
+    <div class="speed-control">
+      <label>Speed</label>
+      <select id="speedSelect">
+        <option value="2000">Slow</option>
+        <option value="1200" selected>Normal</option>
+        <option value="600">Fast</option>
+      </select>
+    </div>
+  </div>
+  <br>
+  <p class="map-hint">🖱 Click anywhere on the map to load Sentinel-2 imagery for that location</p>
 
 </div>
 {% endblock %}

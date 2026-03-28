@@ -2,13 +2,15 @@
 
 let map;
 let sentinelLayer = null;
+let playInterval = null;
+let isPlaying = false;
+let currentDate = null;  // ← track current date so moveend can re-fetch
 
-// Generate dates every 3 months from 2015–2025
 function generateDates() {
     const dates = [];
     for (let year = 2015; year <= 2025; year++) {
         for (let month of [1, 4, 7, 10]) {
-            dates.push(`${year}-${month.toString().padStart(2, '0')}-15`);
+            dates.push(`${year}-${String(month).padStart(2, '0')}-01`);
         }
     }
     return dates;
@@ -17,113 +19,183 @@ function generateDates() {
 const dates = generateDates();
 
 function initMap() {
-    map = L.map('map').setView([40.7128, -74.0060], 10);
+    map = L.map('map', { zoomControl: true }).setView([40.7128, -74.0060], 10);
 
-    const googleSat = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-        maxZoom: 20, subdomains: ['mt0','mt1','mt2','mt3'], attribution: '© Google'
-    });
-
-    const googleHybrid = L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
-        maxZoom: 20, subdomains: ['mt0','mt1','mt2','mt3'], attribution: '© Google'
-    });
-
-    const googleStreets = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-        maxZoom: 20, subdomains: ['mt0','mt1','mt2','mt3'], attribution: '© Google'
-    });
+    const googleSat = L.tileLayer(
+        'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+        { maxZoom: 20, subdomains: ['mt0','mt1','mt2','mt3'], attribution: '© Google' }
+    );
+    const googleHybrid = L.tileLayer(
+        'https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',
+        { maxZoom: 20, subdomains: ['mt0','mt1','mt2','mt3'], attribution: '© Google' }
+    );
+    const googleStreets = L.tileLayer(
+        'https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+        { maxZoom: 20, subdomains: ['mt0','mt1','mt2','mt3'], attribution: '© Google' }
+    );
 
     googleSat.addTo(map);
-
     L.control.layers({
-        "Google Satellite": googleSat,
-        "Google Hybrid": googleHybrid,
-        "Google Streets": googleStreets
+        "Satellite": googleSat,
+        "Hybrid": googleHybrid,
+        "Streets": googleStreets
     }).addTo(map);
+
+    // ── Click to set location ──────────────────────────────
+    let clickMarker = null;
+
+    map.on('click', (e) => {
+        const { lat, lng } = e.latlng;
+
+        // Move marker or create it
+        if (clickMarker) {
+            clickMarker.setLatLng([lat, lng]);
+        } else {
+            clickMarker = L.marker([lat, lng]).addTo(map);
+        }
+
+        // Fetch imagery for clicked point
+        if (currentDate) loadSentinelImage(currentDate, lat, lng);
+    });
 }
 
-function showLoading() {
+function showLoading(msg = 'Fetching imagery…') {
     document.getElementById('loadingOverlay').style.display = 'flex';
+    document.getElementById('loadingStatus').textContent = msg;
+    document.getElementById('noImageNotice').style.display = 'none';
 }
 
 function hideLoading() {
     document.getElementById('loadingOverlay').style.display = 'none';
 }
 
-function loadSentinelImage(date) {
-    showLoading();
-    document.getElementById('loadingStatus').textContent = `Fetching image for ${date}...`;
 
-    // Fixed location for now (New York area)
-    const lat = 40.7128;
-    const lon = -74.0060;
+
+function loadSentinelImage(date, lat = null, lon = null) {
+    currentDate = date;
+
+    // Use passed coords, or map center if none given
+    if (lat === null || lon === null) {
+        const center = map.getCenter();
+        lat = center.lat;
+        lon = center.lng;
+    }
+
+    lat = parseFloat(lat).toFixed(5);
+    lon = parseFloat(lon).toFixed(5);
+
+    console.log(`[MAP] Fetching ${date} at ${lat},${lon}`);
+    showLoading(`Fetching ${date}…`);
+    document.getElementById('displayDate').textContent = date;
+    document.getElementById('actualDateNote').textContent = '';
+    document.getElementById('noImageNotice').style.display = 'none';
 
     fetch(`/get_image?lat=${lat}&lon=${lon}&date=${date}`)
-        .then(res => res.json())
+        .then(r => r.json())
         .then(data => {
+            console.log('[MAP] Response:', data);
+
             if (sentinelLayer) {
+                sentinelLayer.off();
                 map.removeLayer(sentinelLayer);
+                sentinelLayer = null;
             }
 
             if (!data.tile_url) {
-                console.log(`No image available for ${date}`);
-                document.getElementById('loadingStatus').textContent = "No image found for this date";
-                setTimeout(hideLoading, 1500);
+                console.warn('[MAP] No tile_url returned');
+                document.getElementById('noImageNotice').style.display = 'block';
+                hideLoading();
                 return;
             }
 
+            if (data.actual_date && data.actual_date !== date) {
+                document.getElementById('actualDateNote').textContent =
+                    `(nearest: ${data.actual_date})`;
+            }
+
             sentinelLayer = L.tileLayer(data.tile_url, {
+                minZoom: 3,
+                maxNativeZoom: 18,
                 maxZoom: 18,
-                opacity: 0.9,
-                attribution: 'Sentinel-2 via Google Earth Engine'
+                opacity: 0.85,
+                tileSize: 256,
+                attribution: 'Sentinel-2 · Google Earth Engine',
+                crossOrigin: true,
+                updateWhenIdle: false,
+                keepBuffer: 2,
             }).addTo(map);
 
-            // Hide loading once the layer is added
-            document.getElementById('loadingStatus').textContent = "Loading tiles...";
-            
-            // Wait a bit for tiles to start loading, then hide
-            setTimeout(hideLoading, 1200);
-            console.log(`✅ Sentinel-2 layer added for ${date}`);
+            let loadFired = false;
+            const onLoad = () => {
+                if (!loadFired) { loadFired = true; hideLoading(); }
+            };
+            sentinelLayer.on('load', onLoad);
+            sentinelLayer.on('tileerror', onLoad);
+            setTimeout(onLoad, 10000);
         })
         .catch(err => {
-            console.error("Fetch error:", err);
-            document.getElementById('loadingStatus').textContent = "Error loading image";
-            setTimeout(hideLoading, 2000);
+            console.error('[MAP] Fetch error:', err);
+            hideLoading();
         });
 }
 
-// Create date bar
-function createDateBar() {
-    const dateBar = document.getElementById('dateBar');
-    dateBar.innerHTML = '';
+function buildTimeline() {
+    const slider = document.getElementById('timelineSlider');
+    slider.max = dates.length - 1;
+    slider.value = dates.length - 1;
 
-    dates.forEach((date, index) => {
-        const btn = document.createElement('button');
-        btn.textContent = date;
-        btn.className = 'btn btn-outline-light btn-sm me-2 mb-2';
+    const labelsEl = document.getElementById('yearLabels');
+    const ticksEl  = document.getElementById('timelineTicks');
+    const years = [...new Set(dates.map(d => d.slice(0, 4)))];
 
-        if (index === dates.length - 1) {
-            btn.classList.add('active', 'btn-primary');
-        }
+    years.forEach(year => {
+        const firstIdx = dates.findIndex(d => d.startsWith(year));
+        const pct = (firstIdx / (dates.length - 1)) * 100;
+        const lbl = document.createElement('span');
+        lbl.textContent = year;
+        lbl.style.left = `${pct}%`;
+        labelsEl.appendChild(lbl);
+    });
 
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('#dateBar button').forEach(b => {
-                b.classList.remove('active', 'btn-primary');
-            });
-            btn.classList.add('active', 'btn-primary');
+    dates.forEach((_, i) => {
+        const tick = document.createElement('span');
+        tick.style.left = `${(i / (dates.length - 1)) * 100}%`;
+        ticksEl.appendChild(tick);
+    });
 
-            loadSentinelImage(date);
-        });
-
-        dateBar.appendChild(btn);
+    let debounceTimer;
+    slider.addEventListener('input', () => {
+        const date = dates[parseInt(slider.value)];
+        document.getElementById('displayDate').textContent = date;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => loadSentinelImage(date), 400);
     });
 }
 
-// Start the app
+function togglePlay() {
+    const btn = document.getElementById('playBtn');
+    if (isPlaying) {
+        clearInterval(playInterval);
+        isPlaying = false;
+        btn.textContent = '▶';
+    } else {
+        isPlaying = true;
+        btn.textContent = '⏸';
+        const speed = parseInt(document.getElementById('speedSelect').value);
+        playInterval = setInterval(() => {
+            const slider = document.getElementById('timelineSlider');
+            let next = parseInt(slider.value) + 1;
+            if (next >= dates.length) next = 0;
+            slider.value = next;
+            loadSentinelImage(dates[next]);
+        }, speed);
+    }
+}
+
+document.getElementById('playBtn')?.addEventListener('click', togglePlay);
+
 document.addEventListener('DOMContentLoaded', () => {
     initMap();
-    createDateBar();
-
-    setTimeout(() => {
-        const latestDate = dates[dates.length - 1];
-        loadSentinelImage(latestDate);
-    }, 800);
+    buildTimeline();
+    setTimeout(() => loadSentinelImage(dates[dates.length - 1]), 600);
 });
