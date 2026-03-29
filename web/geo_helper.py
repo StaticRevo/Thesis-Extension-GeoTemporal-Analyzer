@@ -1,9 +1,14 @@
 import ee
 
-def get_tile_url(lat, lon, date):
+def get_tile_url(lat, lon, date, bbox=None):  # ← add bbox param
     try:
-        point = ee.Geometry.Point([float(lon), float(lat)])
-        region = point.buffer(50000).bounds()  # bigger region = tiles cover more area
+        # ── Region: use bbox if provided, otherwise buffer the point ──
+        if bbox:
+            min_lng, min_lat, max_lng, max_lat = [float(x) for x in bbox.split(',')]
+            region = ee.Geometry.BBox(min_lng, min_lat, max_lng, max_lat)
+        else:
+            point = ee.Geometry.Point([float(lon), float(lat)])
+            region = point.buffer(50000).bounds()
 
         start = ee.Date(date)
         end = start.advance(60, 'day')
@@ -30,7 +35,6 @@ def get_tile_url(lat, lon, date):
 
         image = collection.mosaic()
 
-        # Percentile stretch over the region
         percentiles = image.select(['B4', 'B3', 'B2']).reduceRegion(
             reducer=ee.Reducer.percentile([2, 98]),
             geometry=region,
@@ -43,8 +47,6 @@ def get_tile_url(lat, lon, date):
             val = percentiles.get(f'{band}_p{pct}')
             return val if val is not None else (0 if pct == 2 else 3000)
 
-        # visualize() bakes the stretch into the image then GEE
-        # handles zoom-dependent resolution automatically per tile request
         rgb = image.visualize(
             bands=['B4', 'B3', 'B2'],
             min=[p('B4', 2),  p('B3', 2),  p('B2', 2)],

@@ -15,11 +15,12 @@ def get_image():
     lat = request.args.get("lat", "40.7128")
     lon = request.args.get("lon", "-74.0060")
     date = request.args.get("date")
+    bbox = request.args.get("bbox") 
 
     if not date:
         return jsonify({"error": "date parameter required"}), 400
 
-    result = get_tile_url(lat, lon, date)
+    result = get_tile_url(lat, lon, date, bbox)
 
     if result is None:
         return jsonify({"tile_url": None, "actual_date": None})

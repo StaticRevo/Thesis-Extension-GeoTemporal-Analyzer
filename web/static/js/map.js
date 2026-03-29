@@ -1,10 +1,9 @@
-// static/js/map.js
-
 let map;
 let sentinelLayer = null;
 let playInterval = null;
 let isPlaying = false;
-let currentDate = null;  // ← track current date so moveend can re-fetch
+let currentDate = null;
+let currentFetch = null;  // ← was missing, caused crash on button click
 
 function generateDates() {
     const dates = [];
@@ -41,22 +40,46 @@ function initMap() {
         "Streets": googleStreets
     }).addTo(map);
 
-    // ── Click to set location ──────────────────────────────
-    let clickMarker = null;
+    updatePreviewRect();
+    map.on('move', updatePreviewRect);
+    map.on('zoom', updatePreviewRect);
 
-    map.on('click', (e) => {
-        const { lat, lng } = e.latlng;
+    //map.on('zoomend', updateSentinelOpacity);
+    map.on('zoomend', updateZoomIndicator);
+    updateZoomIndicator();
 
-        // Move marker or create it
-        if (clickMarker) {
-            clickMarker.setLatLng([lat, lng]);
-        } else {
-            clickMarker = L.marker([lat, lng]).addTo(map);
+    document.getElementById('confirmBtn').addEventListener('click', () => {
+        // ← fallback to latest date if slider hasn't been touched yet
+        if (!currentDate) {
+            currentDate = dates[dates.length - 1];
+            document.getElementById('timelineSlider').value = dates.length - 1;
+            document.getElementById('displayDate').textContent = currentDate;
         }
-
-        // Fetch imagery for clicked point
-        if (currentDate) loadSentinelImage(currentDate, lat, lng);
+        const center = map.getCenter();
+        loadSentinelImage(currentDate, center.lat, center.lng);
     });
+}
+
+function updatePreviewRect() {
+    const mapEl = document.getElementById('map');
+    const rect  = document.getElementById('previewRect');
+    const btn   = document.getElementById('confirmBtn');
+
+    const mw = mapEl.offsetWidth;
+    const mh = mapEl.offsetHeight;
+
+    const bw = Math.round(mw * 0.6);
+    const bh = Math.round(mh * 0.6);
+    const bx = Math.round((mw - bw) / 2);
+    const by = Math.round((mh - bh) / 2);
+
+    rect.style.left   = bx + 'px';
+    rect.style.top    = by + 'px';
+    rect.style.width  = bw + 'px';
+    rect.style.height = bh + 'px';
+
+    btn.style.left = (bx + bw / 2) + 'px';
+    btn.style.top  = (by + bh + 10) + 'px';
 }
 
 function showLoading(msg = 'Fetching imagery…') {
@@ -69,31 +92,55 @@ function hideLoading() {
     document.getElementById('loadingOverlay').style.display = 'none';
 }
 
-
+function updateSentinelOpacity() {
+    if (!sentinelLayer) return;
+    const z = map.getZoom();
+    if (z <= 13)       sentinelLayer.setOpacity(0.85);
+    else if (z === 14) sentinelLayer.setOpacity(0.6);
+    else if (z === 15) sentinelLayer.setOpacity(0.35);
+    else               sentinelLayer.setOpacity(0.15);
+}
 
 function loadSentinelImage(date, lat = null, lon = null) {
     currentDate = date;
 
-    // Use passed coords, or map center if none given
+    if (currentFetch) {
+        currentFetch.abort();
+        currentFetch = null;
+    }
+
     if (lat === null || lon === null) {
         const center = map.getCenter();
         lat = center.lat;
         lon = center.lng;
     }
 
-    lat = parseFloat(lat).toFixed(5);
-    lon = parseFloat(lon).toFixed(5);
+    const mapEl = document.getElementById('map');
+    const mw = mapEl.offsetWidth;
+    const mh = mapEl.offsetHeight;
+    const bw = Math.round(mw * 0.6);
+    const bh = Math.round(mh * 0.6);
+    const bx = Math.round((mw - bw) / 2);
+    const by = Math.round((mh - bh) / 2);
 
-    console.log(`[MAP] Fetching ${date} at ${lat},${lon}`);
+    const sw = map.containerPointToLatLng([bx,      by + bh]);
+    const ne = map.containerPointToLatLng([bx + bw, by     ]);
+
+    const controller = new AbortController();
+    currentFetch = controller;
+
     showLoading(`Fetching ${date}…`);
     document.getElementById('displayDate').textContent = date;
     document.getElementById('actualDateNote').textContent = '';
     document.getElementById('noImageNotice').style.display = 'none';
+    document.getElementById('previewRect').classList.add('loading');
 
-    fetch(`/get_image?lat=${lat}&lon=${lon}&date=${date}`)
+    fetch(`/get_image?lat=${lat}&lon=${lon}&date=${date}&bbox=${sw.lng},${sw.lat},${ne.lng},${ne.lat}`,
+          { signal: controller.signal })
         .then(r => r.json())
         .then(data => {
-            console.log('[MAP] Response:', data);
+            currentFetch = null;
+            document.getElementById('previewRect').classList.remove('loading');
 
             if (sentinelLayer) {
                 sentinelLayer.off();
@@ -102,7 +149,6 @@ function loadSentinelImage(date, lat = null, lon = null) {
             }
 
             if (!data.tile_url) {
-                console.warn('[MAP] No tile_url returned');
                 document.getElementById('noImageNotice').style.display = 'block';
                 hideLoading();
                 return;
@@ -117,13 +163,16 @@ function loadSentinelImage(date, lat = null, lon = null) {
                 minZoom: 3,
                 maxNativeZoom: 18,
                 maxZoom: 18,
-                opacity: 0.85,
+                opacity: 0.9,
                 tileSize: 256,
+                //bounds: L.latLngBounds(sw, ne),
                 attribution: 'Sentinel-2 · Google Earth Engine',
                 crossOrigin: true,
                 updateWhenIdle: false,
                 keepBuffer: 2,
             }).addTo(map);
+            
+            //updateSentinelOpacity();
 
             let loadFired = false;
             const onLoad = () => {
@@ -134,6 +183,8 @@ function loadSentinelImage(date, lat = null, lon = null) {
             setTimeout(onLoad, 10000);
         })
         .catch(err => {
+            if (err.name === 'AbortError') return;
+            document.getElementById('previewRect').classList.remove('loading');
             console.error('[MAP] Fetch error:', err);
             hideLoading();
         });
@@ -166,6 +217,7 @@ function buildTimeline() {
     let debounceTimer;
     slider.addEventListener('input', () => {
         const date = dates[parseInt(slider.value)];
+        currentDate = date;  // ← keep currentDate in sync with slider
         document.getElementById('displayDate').textContent = date;
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => loadSentinelImage(date), 400);
@@ -192,10 +244,38 @@ function togglePlay() {
     }
 }
 
+function updateZoomIndicator() {
+    const z = map.getZoom();
+    document.getElementById('zoomLevel').textContent = `Z${z}`;
+
+    let label, color;
+    if (z <= 8)       { label = 'Continental';         color = '#8b949e'; }
+    else if (z <= 10) { label = 'Country view';        color = '#8b949e'; }
+    else if (z === 11){ label = 'Regional view';       color = '#58a6ff'; }
+    else if (z === 12){ label = 'City view';           color = '#58a6ff'; }
+    else if (z === 13){ label = '✓ Best for Sentinel'; color = '#3fb950'; }
+    else if (z === 14){ label = '✓ Sentinel native';   color = '#3fb950'; }
+    else if (z === 15){ label = '⚠ Approaching limit'; color = '#d29922'; }
+    else if (z === 16){ label = '⚠ Past Sentinel res'; color = '#f0883e'; }
+    else              { label = '✕ Too zoomed in';     color = '#f85149'; }
+
+    const labelEl = document.getElementById('zoomLabel');
+    const levelEl = document.getElementById('zoomLevel');
+    labelEl.textContent = label;
+    labelEl.style.color = color;
+    levelEl.style.color = color;
+}
+
 document.getElementById('playBtn')?.addEventListener('click', togglePlay);
 
 document.addEventListener('DOMContentLoaded', () => {
     initMap();
     buildTimeline();
-    setTimeout(() => loadSentinelImage(dates[dates.length - 1]), 600);
+
+    currentDate = dates[dates.length - 1];
+    document.getElementById('displayDate').textContent = currentDate;
+
+    document.getElementById('opacitySlider').addEventListener('input', (e) => {
+        if (sentinelLayer) sentinelLayer.setOpacity(parseFloat(e.target.value));
+    });
 });

@@ -24,6 +24,14 @@
   <div class="map-wrapper">
     <div id="map"></div>
 
+    <!-- Preview rectangle — positioned by JS -->
+    <div id="previewRect" class="preview-rect">
+      <span class="preview-label">Sentinel-2 preview area</span>
+    </div>
+
+    <!-- Confirm button — positioned by JS below the rect -->
+    <button id="confirmBtn" class="confirm-btn">Load Sentinel imagery</button>
+
     <!-- Loading overlay inside map -->
     <div id="loadingOverlay" class="map-loading" style="display:none">
       <div class="loader-inner">
@@ -35,6 +43,12 @@
     <!-- No-image notice -->
     <div id="noImageNotice" class="no-image-notice" style="display:none">
       ⚠ No clear imagery found near this date
+    </div>
+
+    <!-- Zoom level indicator -->
+    <div id="zoomIndicator" class="zoom-indicator">
+      <span id="zoomLevel">Z10</span>
+      <span id="zoomLabel">Regional view</span>
     </div>
   </div>
 
@@ -60,8 +74,13 @@
       </select>
     </div>
   </div>
-  <br>
-  <p class="map-hint">🖱 Click anywhere on the map to load Sentinel-2 imagery for that location</p>
+
+  <div class="speed-control">
+    <label>Opacity</label>
+    <input type="range" id="opacitySlider" min="0" max="1" step="0.05" value="0.9" style="width:80px">
+  </div>
+
+  <p class="map-hint">Pan the map to your area of interest, then press Load Sentinel imagery</p>
 
 </div>
 {% endblock %}
