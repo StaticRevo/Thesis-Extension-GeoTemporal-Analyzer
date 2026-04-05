@@ -266,3 +266,138 @@
     color: #8b949e;
     margin-top: 2px;
 }
+
+.cat-hero {
+    background: linear-gradient(135deg, #1a2332 0%, #0d1b2a 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 3rem 0 2rem;
+    margin-bottom: 2rem;
+}
+.cat-hero h1 { font-size: 2rem; font-weight: 700; }
+.cat-hero p  { color: #8b949e; max-width: 600px; }
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+.filter-btn {
+    font-size: 0.75rem;
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: transparent;
+    color: #adb5bd;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.filter-btn:hover,
+.filter-btn.active {
+    background: #375a7f;
+    border-color: #375a7f;
+    color: #fff;
+}
+
+.cat-card {
+    background: #1e2a3a;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+    height: 100%;
+    cursor: pointer;
+}
+.cat-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(55,90,127,0.6);
+}
+
+.cat-images {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 180px;
+    overflow: hidden;
+}
+.cat-images img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.cat-images .img-label {
+    position: relative;
+    overflow: hidden;
+}
+.cat-images .img-label::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    font-size: 0.55rem;
+    background: rgba(0,0,0,0.65);
+    color: #fff;
+    padding: 1px 5px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.cat-body { padding: 1rem 1.1rem 1.2rem; }
+
+.cat-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+}
+.badge-natural     { background: rgba(63,185,80,0.15);  color: #3fb950; }
+.badge-urban       { background: rgba(248,81,73,0.15);  color: #f85149; }
+.badge-water       { background: rgba(88,166,255,0.15); color: #58a6ff; }
+.badge-agriculture { background: rgba(210,153,34,0.15); color: #d29922; }
+
+.cat-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; color: #e6edf3; }
+.cat-emoji { font-size: 1.2rem; margin-right: 6px; }
+.cat-desc  { font-size: 0.78rem; color: #8b949e; line-height: 1.55; margin-bottom: 0.75rem; }
+
+.species-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+.species-tag {
+    font-size: 0.65rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 2px 7px;
+    color: #adb5bd;
+    font-style: italic;
+}
+
+/* Modal */
+.modal-content { background: #1e2a3a; border: 1px solid rgba(255,255,255,0.1); }
+.modal-header  { border-bottom: 1px solid rgba(255,255,255,0.08); }
+.modal-footer  { border-top:    border-top: 1px solid rgba(255,255,255,0.08); }
+.modal-images  {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 1rem;
+}
+.modal-images img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+.modal-img-label {
+    font-size: 0.65rem;
+    color: #8b949e;
+    text-align: center;
+    margin-top: 3px;
+}

@@ -1,0 +1,546 @@
+{% extends "base.html" %}
+{% block title %}Land Use Categories - GeoTemporal Analyzer{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/categories.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="cat-hero">
+  <div class="container">
+    <h1>🗂 Land Use Categories</h1>
+    <p>19 classification categories used for Sentinel-2 satellite imagery analysis. Each category describes a distinct land cover type found across Mediterranean landscapes.</p>
+  </div>
+</div>
+
+<div class="container pb-5">
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterCats('all', this)">All (19)</button>
+    <button class="filter-btn" onclick="filterCats('natural', this)">🌿 Natural</button>
+    <button class="filter-btn" onclick="filterCats('agriculture', this)">🌾 Agriculture</button>
+    <button class="filter-btn" onclick="filterCats('urban', this)">🏙️ Urban</button>
+    <button class="filter-btn" onclick="filterCats('water', this)">💧 Water</button>
+  </div>
+
+  <div class="row g-4" id="catGrid">
+
+    <!-- 1 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="agriculture">
+      <div class="cat-card" onclick="openModal('agroforestry')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Dehesa_de_Extremadura.jpg/640px-Dehesa_de_Extremadura.jpg"
+                 alt="Agro-forestry aerial"
+                 onerror="this.src='https://placehold.co/320x180/1e2a3a/d29922?text=Agro-forestry'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Olive_trees_in_Kroatia.jpg/640px-Olive_trees_in_Kroatia.jpg"
+                 alt="Olive trees"
+                 onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Olive+Trees'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-agriculture">Agriculture</span>
+          <div class="cat-title"><span class="cat-emoji">🌳</span>1. Agro-forestry areas</div>
+          <p class="cat-desc">Landscapes where trees and crops coexist, creating a semi-natural ecosystem with both agricultural and woody vegetation.</p>
+          <div class="species-list">
+            <span class="species-tag">Olea europaea</span>
+            <span class="species-tag">Ceratonia siliqua</span>
+            <span class="species-tag">Almond</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="agriculture">
+      <div class="cat-card" onclick="openModal('arable')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Wheat_close-up.JPG/640px-Wheat_close-up.JPG"
+                 alt="Arable fields" onerror="this.src='https://placehold.co/320x180/1e2a3a/d29922?text=Arable+Land'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Wheat_harvest.jpg/640px-Wheat_harvest.jpg"
+                 alt="Wheat" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Wheat'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-agriculture">Agriculture</span>
+          <div class="cat-title"><span class="cat-emoji">🌾</span>2. Arable land</div>
+          <p class="cat-desc">Land used for seasonal crop production, regularly ploughed and replanted, with little permanent vegetation.</p>
+          <div class="species-list">
+            <span class="species-tag">Wheat</span>
+            <span class="species-tag">Barley</span>
+            <span class="species-tag">Maize</span>
+            <span class="species-tag">Potatoes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="natural">
+      <div class="cat-card" onclick="openModal('beach')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Aerial_of_sand_dunes.jpg/640px-Aerial_of_sand_dunes.jpg"
+                 alt="Dunes aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/58a6ff?text=Dunes'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Ammophila_arenaria_Dunkirk.jpg/640px-Ammophila_arenaria_Dunkirk.jpg"
+                 alt="Marram grass" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Marram+Grass'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-natural">Natural</span>
+          <div class="cat-title"><span class="cat-emoji">🏖️</span>3. Beaches, dunes, sands</div>
+          <p class="cat-desc">Sandy environments with sparse, stress-tolerant vegetation adapted to salt, wind, and drought.</p>
+          <div class="species-list">
+            <span class="species-tag">Ammophila arenaria</span>
+            <span class="species-tag">Pancratium maritimum</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="natural">
+      <div class="cat-card" onclick="openModal('broadleaf')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/24701-nature-natural-beauty.jpg/640px-24701-nature-natural-beauty.jpg"
+                 alt="Forest canopy" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Broadleaf+Forest'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Quercus_robur_in_Eastnor_Park.jpg/640px-Quercus_robur_in_Eastnor_Park.jpg"
+                 alt="Oak tree" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Oak+Tree'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-natural">Natural</span>
+          <div class="cat-title"><span class="cat-emoji">🌳</span>4. Broad-leaved forest</div>
+          <p class="cat-desc">Forests dominated by wide-leaf trees forming dense canopies and supporting rich biodiversity.</p>
+          <div class="species-list">
+            <span class="species-tag">Quercus spp.</span>
+            <span class="species-tag">Eucalyptus</span>
+            <span class="species-tag">Chestnut</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="water">
+      <div class="cat-card" onclick="openModal('coastalwetland')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Sa_Dragonera_island_-_salt_flats.jpg/640px-Sa_Dragonera_island_-_salt_flats.jpg"
+                 alt="Salt flats aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/58a6ff?text=Coastal+Wetland'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Salicornia_europaea_1.jpg/640px-Salicornia_europaea_1.jpg"
+                 alt="Salicornia" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Salicornia'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-water">Water</span>
+          <div class="cat-title"><span class="cat-emoji">🌊</span>5. Coastal wetlands</div>
+          <p class="cat-desc">Wetlands near the coast influenced by saltwater, supporting vegetation adapted to saline conditions.</p>
+          <div class="species-list">
+            <span class="species-tag">Salicornia</span>
+            <span class="species-tag">Phragmites</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="agriculture">
+      <div class="cat-card" onclick="openModal('complexcult')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Terrace_farming.jpg/640px-Terrace_farming.jpg"
+                 alt="Complex cultivation" onerror="this.src='https://placehold.co/320x180/1e2a3a/d29922?text=Complex+Cultivation'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Farmers_who_work_in_their_fields.jpg/640px-Farmers_who_work_in_their_fields.jpg"
+                 alt="Mixed farming" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Mixed+Farming'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-agriculture">Agriculture</span>
+          <div class="cat-title"><span class="cat-emoji">🌱</span>6. Complex cultivation patterns</div>
+          <p class="cat-desc">Highly fragmented agricultural landscapes with a mix of fields, trees, and natural patches.</p>
+          <div class="species-list">
+            <span class="species-tag">Mixed crops</span>
+            <span class="species-tag">Fruit trees</span>
+            <span class="species-tag">Shrubs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="natural">
+      <div class="cat-card" onclick="openModal('coniferous')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Aerial_view_of_the_Bavarian_Forest.jpg/640px-Aerial_view_of_the_Bavarian_Forest.jpg"
+                 alt="Coniferous aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Coniferous+Forest'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Pinus_sylvestris_-_Waldkiefer.jpg/640px-Pinus_sylvestris_-_Waldkiefer.jpg"
+                 alt="Pine" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Pine+Tree'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-natural">Natural</span>
+          <div class="cat-title"><span class="cat-emoji">🌲</span>7. Coniferous forest</div>
+          <p class="cat-desc">Forests dominated by needle-leaf trees, typically evergreen and adapted to poorer soils.</p>
+          <div class="species-list">
+            <span class="species-tag">Pinus</span>
+            <span class="species-tag">Cupressus</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="urban">
+      <div class="cat-card" onclick="openModal('industrial')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Industrial_area_from_above.jpg/640px-Industrial_area_from_above.jpg"
+                 alt="Industrial aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/f85149?text=Industrial'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Industrial_plant.jpg/640px-Industrial_plant.jpg"
+                 alt="Industrial ground" onerror="this.src='https://placehold.co/320x180/1e2a3a/f85149?text=Commercial+Units'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-urban">Urban</span>
+          <div class="cat-title"><span class="cat-emoji">🏭</span>8. Industrial or commercial units</div>
+          <p class="cat-desc">Built-up areas dominated by buildings and infrastructure, with minimal natural vegetation.</p>
+          <div class="species-list">
+            <span class="species-tag">Ornamental plants</span>
+            <span class="species-tag">Minimal vegetation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="water">
+      <div class="cat-card" onclick="openModal('inlandwater')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Lagoon_from_above.jpg/640px-Lagoon_from_above.jpg"
+                 alt="Lake aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/58a6ff?text=Inland+Water'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Nymphaea_alba_-_white_waterlily.jpg/640px-Nymphaea_alba_-_white_waterlily.jpg"
+                 alt="Water lily" onerror="this.src='https://placehold.co/320x180/1e2a3a/58a6ff?text=Water+Lily'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-water">Water</span>
+          <div class="cat-title"><span class="cat-emoji">💧</span>9. Inland waters</div>
+          <p class="cat-desc">Freshwater bodies including lakes, rivers, and reservoirs dominated by aquatic ecosystems.</p>
+          <div class="species-list">
+            <span class="species-tag">Nymphaea</span>
+            <span class="species-tag">Algae</span>
+            <span class="species-tag">Aquatic plants</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="water">
+      <div class="cat-card" onclick="openModal('inlandwetland')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Marshland.jpg/640px-Marshland.jpg"
+                 alt="Marsh aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/58a6ff?text=Inland+Wetland'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Phragmites_australis_Keila.jpg/640px-Phragmites_australis_Keila.jpg"
+                 alt="Reeds" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Phragmites'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-water">Water</span>
+          <div class="cat-title"><span class="cat-emoji">🌿</span>10. Inland wetlands</div>
+          <p class="cat-desc">Water-saturated land supporting dense, moisture-loving vegetation away from the coast.</p>
+          <div class="species-list">
+            <span class="species-tag">Phragmites</span>
+            <span class="species-tag">Sedges</span>
+            <span class="species-tag">Marsh grasses</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="agriculture">
+      <div class="cat-card" onclick="openModal('agrinatural')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Farmland_from_above.jpg/640px-Farmland_from_above.jpg"
+                 alt="Mixed farmland aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/d29922?text=Agri+Natural'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Hedgerow_in_Devon.jpg/640px-Hedgerow_in_Devon.jpg"
+                 alt="Hedgerow" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Hedgerow'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-agriculture">Agriculture</span>
+          <div class="cat-title"><span class="cat-emoji">🌾</span>11. Agriculture with natural vegetation</div>
+          <p class="cat-desc">Agricultural land interspersed with patches of natural vegetation such as hedgerows and small forests.</p>
+          <div class="species-list">
+            <span class="species-tag">Cereals</span>
+            <span class="species-tag">Oak</span>
+            <span class="species-tag">Olive</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="water">
+      <div class="cat-card" onclick="openModal('marine')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Mediterranean_Sea_from_above.jpg/640px-Mediterranean_Sea_from_above.jpg"
+                 alt="Sea aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/58a6ff?text=Marine+Waters'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Posidonia_oceanica_Malta.jpg/640px-Posidonia_oceanica_Malta.jpg"
+                 alt="Posidonia" onerror="this.src='https://placehold.co/320x180/1e2a3a/58a6ff?text=Posidonia'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-water">Water</span>
+          <div class="cat-title"><span class="cat-emoji">🌊</span>12. Marine waters</div>
+          <p class="cat-desc">Open sea areas, sometimes containing underwater seagrass meadows and algae.</p>
+          <div class="species-list">
+            <span class="species-tag">Posidonia oceanica</span>
+            <span class="species-tag">Algae</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 13 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="natural">
+      <div class="cat-card" onclick="openModal('mixedforest')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Mixed_forest_from_above.jpg/640px-Mixed_forest_from_above.jpg"
+                 alt="Mixed forest aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Mixed+Forest'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Mixed_woodland.jpg/640px-Mixed_woodland.jpg"
+                 alt="Mixed woodland" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Mixed+Woodland'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-natural">Natural</span>
+          <div class="cat-title"><span class="cat-emoji">🌲🌳</span>13. Mixed forest</div>
+          <p class="cat-desc">Forests containing both broadleaf and coniferous trees, creating high structural and biological diversity.</p>
+          <div class="species-list">
+            <span class="species-tag">Oak</span>
+            <span class="species-tag">Pine</span>
+            <span class="species-tag">Chestnut</span>
+            <span class="species-tag">Cypress</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 14 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="natural">
+      <div class="cat-card" onclick="openModal('moors')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Garigue_Malta.jpg/640px-Garigue_Malta.jpg"
+                 alt="Garigue Malta" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Garigue'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Thymus_vulgaris_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-266.jpg/640px-Thymus_vulgaris_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-266.jpg"
+                 alt="Thyme" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Thyme'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-natural">Natural</span>
+          <div class="cat-title"><span class="cat-emoji">🌿</span>14. Moors, heathland, sclerophyllous</div>
+          <p class="cat-desc">Low-growing Mediterranean shrublands adapted to dry, nutrient-poor conditions. Known locally as garigue.</p>
+          <div class="species-list">
+            <span class="species-tag">Thymus</span>
+            <span class="species-tag">Rosmarinus</span>
+            <span class="species-tag">Maquis</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 15 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="natural">
+      <div class="cat-card" onclick="openModal('grassland')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Grassland_aerial.jpg/640px-Grassland_aerial.jpg"
+                 alt="Grassland aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Grassland'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Natural_meadow.jpg/640px-Natural_meadow.jpg"
+                 alt="Wild meadow" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Wild+Meadow'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-natural">Natural</span>
+          <div class="cat-title"><span class="cat-emoji">🌱</span>15. Natural grassland & sparse vegetation</div>
+          <p class="cat-desc">Areas dominated by grasses and herbs, often used for grazing or naturally occurring in open landscapes.</p>
+          <div class="species-list">
+            <span class="species-tag">Wild grasses</span>
+            <span class="species-tag">Clover</span>
+            <span class="species-tag">Herbs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 16 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="agriculture">
+      <div class="cat-card" onclick="openModal('pastures')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Pasture_aerial_view.jpg/640px-Pasture_aerial_view.jpg"
+                 alt="Pasture aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/d29922?text=Pasture'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Cows_in_a_grassy_field.jpg/640px-Cows_in_a_grassy_field.jpg"
+                 alt="Cattle" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Grazing+Cattle'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-agriculture">Agriculture</span>
+          <div class="cat-title"><span class="cat-emoji">🐄</span>16. Pastures</div>
+          <p class="cat-desc">Managed grasslands maintained for livestock grazing, enriched with clover and fodder grasses.</p>
+          <div class="species-list">
+            <span class="species-tag">Grazing grasses</span>
+            <span class="species-tag">Clover</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 17 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="agriculture">
+      <div class="cat-card" onclick="openModal('permcrops')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Vineyard_aerial.jpg/640px-Vineyard_aerial.jpg"
+                 alt="Vineyard aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/d29922?text=Permanent+Crops'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Young-olive-trees.jpg/640px-Young-olive-trees.jpg"
+                 alt="Olive grove" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Olive+Grove'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-agriculture">Agriculture</span>
+          <div class="cat-title"><span class="cat-emoji">🌴</span>17. Permanent crops</div>
+          <p class="cat-desc">Long-term plantations including vineyards, olive groves, and citrus orchards.</p>
+          <div class="species-list">
+            <span class="species-tag">Vitis vinifera</span>
+            <span class="species-tag">Olea europaea</span>
+            <span class="species-tag">Citrus</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 18 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="natural">
+      <div class="cat-card" onclick="openModal('transitional')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Transitional_woodland_aerial.jpg/640px-Transitional_woodland_aerial.jpg"
+                 alt="Transitional aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Transitional+Woodland'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Young_trees_shrubs.jpg/640px-Young_trees_shrubs.jpg"
+                 alt="Young woodland" onerror="this.src='https://placehold.co/320x180/1e2a3a/3fb950?text=Young+Woodland'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-natural">Natural</span>
+          <div class="cat-title"><span class="cat-emoji">🌿</span>18. Transitional woodland & shrub</div>
+          <p class="cat-desc">Areas in ecological succession, transitioning from grassland or shrubland to forest.</p>
+          <div class="species-list">
+            <span class="species-tag">Young trees</span>
+            <span class="species-tag">Pioneer shrubs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 19 -->
+    <div class="col-md-6 col-lg-4 cat-item" data-type="urban">
+      <div class="cat-card" onclick="openModal('urban')">
+        <div class="cat-images">
+          <div class="img-label" data-label="Satellite">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Valletta_aerial.jpg/640px-Valletta_aerial.jpg"
+                 alt="Urban aerial" onerror="this.src='https://placehold.co/320x180/1e2a3a/f85149?text=Urban+Fabric'">
+          </div>
+          <div class="img-label" data-label="Ground">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Malta_urban_street.jpg/640px-Malta_urban_street.jpg"
+                 alt="Urban street" onerror="this.src='https://placehold.co/320x180/1e2a3a/f85149?text=Urban+Street'">
+          </div>
+        </div>
+        <div class="cat-body">
+          <span class="cat-badge badge-urban">Urban</span>
+          <div class="cat-title"><span class="cat-emoji">🏙️</span>19. Urban fabric</div>
+          <p class="cat-desc">Cities and towns dominated by buildings, with vegetation limited to parks, gardens, and street trees.</p>
+          <div class="species-list">
+            <span class="species-tag">Parks</span>
+            <span class="species-tag">Gardens</span>
+            <span class="species-tag">Street trees</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="catModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle"></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-images" id="modalImages"></div>
+        <span id="modalBadge" class="cat-badge mb-2 d-inline-block"></span>
+        <p id="modalDesc" style="color:#adb5bd; font-size:0.88rem; line-height:1.7;"></p>
+        <h6 style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.5rem;">Key species</h6>
+        <div id="modalSpecies" class="species-list"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

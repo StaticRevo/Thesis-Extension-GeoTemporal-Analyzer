@@ -28,6 +28,8 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto">
             <li class="nav-item"><a class="nav-link {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index') }}">Home</a></li>
+            <!-- <li class="nav-item"><a class="nav-link {% if request.path == url_for('snapshots') %}active{% endif %}" href="{{ url_for('snapshots') }}">Snapshots</a></li> -->
+            <li class="nav-item"><a class="nav-link {% if request.path == url_for('categories') %}active{% endif %}" href="{{ url_for('categories') }}">Categories</a></li>
           </ul>
         </div>
       </div>
@@ -49,6 +51,7 @@
     <script src="{{ url_for('static', filename='js/api.js') }}"></script>
     <script src="{{ url_for('static', filename='js/map.js') }}"></script>
     <script src="{{ url_for('static', filename='js/slider.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/categories.js') }}"></script>
 
     {% block extra_js %}{% endblock %}
   </body>
