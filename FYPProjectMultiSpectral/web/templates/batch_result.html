@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Batch Prediction Result{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1 class="mb-4 text-center">Batch Prediction Result</h1>
+  <h5 class="text-center text-muted mb-4">
+    Experiment: {{ selected_experiment }}
+  </h5>
+
+  <!-- Batch Prediction Table -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-header bg-primary text-white fw-bold">
+      Batch Prediction Results
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Filename</th>
+            <th>Predicted Labels</th>
+            <th>Actual Labels</th>
+            <th>RGB Visualization</th>
+            <th>GradCAM</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for result in results %}
+            <tr>
+              <td>{{ result.filename }}</td>
+              <!-- Predicted labels with probabilities and highlight if matches actual -->
+              <td>
+                <ul class="mb-0">
+                  {% for pred in result.predictions %}
+                    {% if result.actual_labels and pred.label in result.actual_labels %}
+                      <li style="color: green;">{{ pred.label }}: {{ pred.probability | round(3) }}</li>
+                    {% else %}
+                      <li>{{ pred.label }}: {{ pred.probability | round(3) }}</li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </td>
+              <!-- Actual labels column -->
+              <td>
+                {% if result.actual_labels and result.actual_labels|length > 0 %}
+                  <ul class="mb-0">
+                    {% for label in result.actual_labels %}
+                      <li>{{ label }}</li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <p class="mb-0 text-muted">No actual labels available.</p>
+                {% endif %}
+              </td>
+              <!-- RGB composite image column -->
+              <td>
+                <div class="d-flex justify-content-center">
+                  <img src="{{ result.rgb_url }}" alt="RGB Composite" class="img-fluid rounded" style="width: 150px; max-width: 150px;">
+                </div>
+              </td>
+              <!-- GradCAM link column -->
+              <td>
+                <a href="{{ url_for('batch_gradcam', filename=result.filename, experiment=selected_experiment) }}" 
+                   class="btn btn-info btn-sm">
+                  View GradCAM
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Navigation buttons -->
+  <div class="mt-4 text-center">
+    <a href="{{ url_for('predict_page') }}" class="btn btn-primary me-2" aria-label="Upload more images">
+      <i class="bi bi-upload me-1"></i> Upload More Images
+    </a>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary" aria-label="Return to home page">
+      <i class="bi bi-house-door me-1"></i> Return Home
+    </a>
+  </div>
+</div>
+{% endblock %}

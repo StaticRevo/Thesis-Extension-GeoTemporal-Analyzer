@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Bubble Chart: F2 vs. Training Time{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <h1 class="mb-4 section-title text-center">Bubble Chart: F2 Score vs. Training Time</h1>
+
+      <!-- Model Selection UI -->
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Filter Models</h5>
+           <!-- Button to toggle filter visibility -->
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterModels" aria-expanded="false">
+            Toggle Filters
+          </button>
+        </div>
+        <div id="filterModels" class="collapse show">
+          <div class="card-body">
+            <!-- Model filter form -->
+            <form id="modelFilterForm" method="GET" action="{{ url_for('bubble_chart') }}">
+              <div class="row">
+                {% for model in model_options %}
+                  <div class="col-md-4 col-sm-6">
+                    <label class="form-check-label">
+                      <input type="checkbox" class="form-check-input model-checkbox" name="models" value="{{ model }}"
+                        {% if request.args.getlist('models') and model in request.args.getlist('models') %} checked {% endif %}>
+                      {{ model }}
+                    </label>
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="mt-3 d-flex justify-content-between">
+                <!-- Button to select/deselect all models -->
+                <button type="button" id="toggleSelectAll" class="btn btn-secondary">Select All / Deselect All</button>
+                <!-- Apply filter button -->
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bubble Chart Container -->
+      <div id="bubbleChart" class="mt-4" style="width: 100%; height: 600px;"></div>
+      <!-- Navigation button to return home -->
+      <div class="mt-4 text-center">
+        <a href="{{ url_for('index') }}" class="btn btn-primary" aria-label="Return to home page">
+          <i class="bi bi-house-door me-1"></i> Return Home
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Plotly.js for chart rendering -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<!-- Pass experiment data to JavaScript -->
+<script type="application/json" id="experimentsData"> 
+  {{ data | tojson | safe }} 
+</script>
+
+<!-- Load custom bubble chart rendering logic -->
+<script src="{{ url_for('static', filename='js/bubble_chart.js') }}"></script>
+<script>
+  const experimentsData = JSON.parse(document.getElementById('experimentsData').textContent);
+  renderBubbleChart(experimentsData);
+</script>
+{% endblock %}
