@@ -401,3 +401,88 @@
     text-align: center;
     margin-top: 3px;
 }
+/* ── Lightbox ────────────────────────────────────────────────────────────── */
+.lightbox-dialog  { max-width: 92vw; }
+.lightbox-content {
+    background: #0d1117;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.lightbox-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.lightbox-title   { font-size: 0.95rem; font-weight: 600; color: #e6edf3; flex: 1; }
+.lightbox-counter {
+    font-size: 0.75rem;
+    color: #8b949e;
+    background: rgba(255,255,255,0.06);
+    padding: 2px 10px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+.lightbox-header .btn-close { margin-left: 0.5rem; }
+
+.lightbox-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    position: relative;
+    min-height: 60vh;
+}
+
+.lightbox-img-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.5rem;
+    max-height: 72vh;
+}
+.lightbox-img {
+    max-width: 100%;
+    max-height: 72vh;
+    object-fit: contain;
+    display: block;
+    border-radius: 4px;
+}
+
+.lightbox-arrow {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 50%;
+    color: #e6edf3;
+    font-size: 1.8rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s, opacity 0.15s;
+    margin: 0 0.75rem;
+    padding: 0;
+}
+.lightbox-arrow:hover:not(:disabled) { background: rgba(55,90,127,0.6); }
+.lightbox-arrow:disabled              { opacity: 0.2; cursor: default; }
+
+.lightbox-footer {
+    padding: 0.6rem 1.25rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    text-align: center;
+}
+.lightbox-caption {
+    font-size: 0.78rem;
+    color: #8b949e;
+    font-style: italic;
+}
