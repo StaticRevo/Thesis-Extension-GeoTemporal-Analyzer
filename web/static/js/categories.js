@@ -11,9 +11,10 @@ const categoryData = [
             src: 'static/images/Agro-Forestry-Satellite.png',
             label: 'Aerial view — agro-forestry landscape'
         },
-        img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Brexia_and_Garcinia_%2814678137749%29.jpg/640px-Brexia_and_Garcinia_%2814678137749%29.jpg',
-        img2label: 'Agro-Forestry example — mixed tree and crop cultivation',
-
+        img2: { 
+            src: 'static/images/Agro-Forestry/agro-forestry-olive.png',
+            label: 'Olive trees in agro-forestry'
+        },
         photos: [
             { src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/KaffrineAgroforestry.jpg/640px-KaffrineAgroforestry.jpg', label: 'Agroforestry example' },
             { src: '/static/img/categories/agroforestry_3.jpg', label: 'Carob grove understory' },
@@ -73,8 +74,10 @@ const categoryData = [
         shortDesc: 'Wetlands near the coast influenced by saltwater, supporting vegetation adapted to saline conditions.',
         desc: 'Low-lying areas near the coast where soil is saturated by seawater, creating salt marshes and brackish habitats. Vegetation is specialised, including reeds, saltmarsh grasses, and succulents. These ecosystems provide critical services such as flood protection, nutrient filtration, and wildlife habitat.',
         species: ['Salicornia', 'Phragmites', 'Saltmarsh grasses'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Sa_Dragonera_island_-_salt_flats.jpg/640px-Sa_Dragonera_island_-_salt_flats.jpg',
-        img1label: 'Aerial view — coastal salt flats',
+        img1: { 
+            src: 'static/images/Coastal-Wetlands-Satellite.png',
+            label: 'Aerial view — coastal wetlands'
+        },
         img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Salicornia_europaea_1.jpg/640px-Salicornia_europaea_1.jpg',
         img2label: 'Glasswort (Salicornia europaea)',
     },
@@ -86,8 +89,10 @@ const categoryData = [
         shortDesc: 'Highly fragmented agricultural landscapes with a mix of fields, trees, and natural patches.',
         desc: 'Land with small, irregularly shaped plots of mixed crops, orchards, and fallow patches. This pattern promotes biodiversity by interspersing cultivated and natural areas. Visually, the landscape appears fragmented, reflecting intensive but traditional farming systems.',
         species: ['Mixed crops', 'Fruit trees', 'Cereals', 'Vegetables'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Terrace_farming.jpg/640px-Terrace_farming.jpg',
-        img1label: 'Aerial view — complex field patterns',
+        img1: { 
+            src: 'static/images/Complex-Cultivation-Patterns-Satellite.png',
+            label: 'Aerial view — complex field patterns'
+        },
         img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Farmers_who_work_in_their_fields.jpg/640px-Farmers_who_work_in_their_fields.jpg',
         img2label: 'Mixed cultivation ground view',
     },
@@ -99,8 +104,10 @@ const categoryData = [
         shortDesc: 'Forests dominated by needle-leaf trees, typically evergreen and adapted to poorer soils.',
         desc: 'Forests dominated by needle-leaf, cone-bearing trees such as pines, spruces, and cypresses. Understory vegetation is usually sparse, consisting of mosses, ferns, and low shrubs. The canopy tends to be uniform, giving a dense, dark-green appearance from above.',
         species: ['Pinus', 'Cupressus', 'Spruce', 'Fir'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Aerial_view_of_the_Bavarian_Forest.jpg/640px-Aerial_view_of_the_Bavarian_Forest.jpg',
-        img1label: 'Aerial view — coniferous canopy',
+        img1: { 
+            src: 'static/images/Coniferous-Forest-Satellite.png',
+            label: 'Aerial view — coniferous canopy'
+        },
         img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Pinus_sylvestris_-_Waldkiefer.jpg/640px-Pinus_sylvestris_-_Waldkiefer.jpg',
         img2label: 'Scots pine (Pinus sylvestris)',
     },
@@ -112,8 +119,10 @@ const categoryData = [
         shortDesc: 'Built-up areas dominated by buildings and infrastructure, with minimal natural vegetation.',
         desc: 'Built-up areas designed for industry, warehouses, or business operations. Vegetation is minimal, often limited to landscaped green spaces or roadside trees. These areas are dominated by man-made surfaces and natural habitats are largely absent.',
         species: ['Ornamental plants', 'Roadside trees'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Industrial_area_from_above.jpg/640px-Industrial_area_from_above.jpg',
-        img1label: 'Aerial view — industrial zone',
+        img1: { 
+            src: 'static/images/Industrial-Commerical-Units-Satellite.png',
+            label: 'Aerial view — industrial zone'
+        },
         img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Industrial_plant.jpg/640px-Industrial_plant.jpg',
         img2label: 'Ground view — commercial units',
     },
@@ -125,8 +134,10 @@ const categoryData = [
         shortDesc: 'Freshwater bodies including lakes, rivers, and reservoirs dominated by aquatic ecosystems.',
         desc: 'Freshwater bodies such as lakes, rivers, reservoirs, and ponds. Aquatic plants include water lilies, reeds, and algae. These habitats are crucial for biodiversity, providing breeding and feeding grounds for birds, fish, and amphibians.',
         species: ['Nymphaea', 'Algae', 'Reeds', 'Riparian grasses'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Lagoon_from_above.jpg/640px-Lagoon_from_above.jpg',
-        img1label: 'Aerial view — inland water body',
+        img1: { 
+            src: 'static/images/Inland-Waters-Satellite.png',
+            label: 'Aerial view — inland water body'
+        },
         img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Nymphaea_alba_-_white_waterlily.jpg/640px-Nymphaea_alba_-_white_waterlily.jpg',
         img2label: 'White water lily (Nymphaea alba)',
     },
@@ -138,8 +149,10 @@ const categoryData = [
         shortDesc: 'Water-saturated land supporting dense, moisture-loving vegetation away from the coast.',
         desc: 'Freshwater-saturated lands away from the coast, including marshes, swamps, and peatlands. Vegetation is dominated by reeds, sedges, rushes, and water-loving herbs. These ecosystems support rich biodiversity and act as natural water filters and flood buffers.',
         species: ['Phragmites', 'Sedges', 'Rushes', 'Marsh herbs'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Marshland.jpg/640px-Marshland.jpg',
-        img1label: 'Aerial view — inland marsh',
+        img1: { 
+            src: 'static/images/Inland-Wetlands-Satellite.png',
+            label: 'Aerial view — inland marsh'
+        },
         img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Phragmites_australis_Keila.jpg/640px-Phragmites_australis_Keila.jpg',
         img2label: 'Common reed (Phragmites australis)',
     },
@@ -151,10 +164,14 @@ const categoryData = [
         shortDesc: 'Agricultural land interspersed with patches of natural vegetation such as hedgerows and small forests.',
         desc: 'Agricultural land interspersed with patches of natural vegetation, such as hedgerows, small forests, or grasslands. This mosaic enhances biodiversity while still producing crops. Landscapes often appear semi-natural, with a mix of green fields and wooded patches.',
         species: ['Cereals', 'Oak', 'Olive', 'Hedgerow shrubs'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Farmland_from_above.jpg/640px-Farmland_from_above.jpg',
-        img1label: 'Aerial view — mixed farmland',
-        img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Hedgerow_in_Devon.jpg/640px-Hedgerow_in_Devon.jpg',
-        img2label: 'Hedgerow vegetation',
+        img1: { 
+            src: 'static/images/Land-Occupied-By-Agirculture-With-Vegetation-Satellite.png',
+            label: 'Aerial view — mixed farmland'
+        },
+        img2: { 
+            src: 'static/images/Hedgerow-Vegetation-Satellite.png',
+            label: 'Hedgerow vegetation'
+        },
     },
     {
         key: 'marine',
@@ -164,10 +181,14 @@ const categoryData = [
         shortDesc: 'Open sea areas, sometimes containing underwater seagrass meadows and algae.',
         desc: 'Open sea areas with minimal terrestrial vegetation. Submerged vegetation may include seagrass meadows (Posidonia oceanica in the Mediterranean) and algae. Marine waters play critical roles in climate regulation and as fishery habitats.',
         species: ['Posidonia oceanica', 'Algae', 'Seagrass'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Mediterranean_Sea_from_above.jpg/640px-Mediterranean_Sea_from_above.jpg',
-        img1label: 'Aerial view — Mediterranean sea',
-        img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Posidonia_oceanica_Malta.jpg/640px-Posidonia_oceanica_Malta.jpg',
-        img2label: 'Posidonia oceanica seagrass',
+        img1: { 
+            src: 'static/images/Marine-Waters-Satellite.png',
+            label: 'Aerial view — Mediterranean sea'
+        },
+        img2: { 
+            src: 'static/images/Seagrass-Meadows-Satellite.png',
+            label: 'Posidonia oceanica seagrass'
+        },
     },
     {
         key: 'mixedforest',
@@ -177,7 +198,10 @@ const categoryData = [
         shortDesc: 'Forests containing both broadleaf and coniferous trees, creating high structural and biological diversity.',
         desc: 'Forests containing both broadleaf and coniferous trees, creating high structural and biological diversity. The canopy has variable height and density, supporting a diverse understory of shrubs, ferns, and herbaceous plants.',
         species: ['Oak', 'Pine', 'Chestnut', 'Cypress'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Mixed_forest_from_above.jpg/640px-Mixed_forest_from_above.jpg',
+        img1: { 
+            src: 'static/images/Mixed-Forest-Satellite.png',
+            label: 'Aerial view — mixed canopy'
+        },
         img1label: 'Aerial view — mixed canopy',
         img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Mixed_woodland.jpg/640px-Mixed_woodland.jpg',
         img2label: 'Ground view — mixed woodland',
@@ -190,10 +214,14 @@ const categoryData = [
         shortDesc: 'Low-growing Mediterranean shrublands adapted to dry, nutrient-poor conditions. Known locally as garigue.',
         desc: 'Low-growing, drought-tolerant shrublands typical of the Mediterranean. These areas often have poor, rocky soils and provide habitats for specialised wildlife. Known locally in Malta as garigue — they appear open with dense low shrubs interspersed with bare rock and ground.',
         species: ['Thymus', 'Rosmarinus', 'Juniper', 'Maquis shrubs'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Garigue_Malta.jpg/640px-Garigue_Malta.jpg',
-        img1label: 'Aerial view — garigue Malta',
-        img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Thymus_vulgaris_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-266.jpg/640px-Thymus_vulgaris_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-266.jpg',
-        img2label: 'Thyme (Thymus vulgaris)',
+        img1: { 
+            src: 'static/images/Moors-Heathland-Vegetation-Satellite.png',
+            label: 'Aerial view — garigue Malta'
+        },
+        img2: { 
+            src: 'static/images/Thyme-Satellite.png',
+            label: 'Thyme (Thymus vulgaris)'
+        },
     },
     {
         key: 'grassland',
@@ -203,7 +231,10 @@ const categoryData = [
         shortDesc: 'Areas dominated by grasses and herbs, often used for grazing or naturally occurring in open landscapes.',
         desc: 'Areas dominated by grasses, herbs, and occasional shrubs, often occurring in regions unsuitable for forests or agriculture. These lands support grazing wildlife and maintain soil structure. Visually they appear open and green with scattered vegetation.',
         species: ['Wild grasses', 'Clover', 'Herbaceous plants'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Grassland_aerial.jpg/640px-Grassland_aerial.jpg',
+           img1: { 
+            src: 'static/images/Natural-Grassland-Sparsely-Vegetated-Satellite.png',
+            label: 'Aerial view — natural grassland'
+        },
         img1label: 'Aerial view — natural grassland',
         img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Natural_meadow.jpg/640px-Natural_meadow.jpg',
         img2label: 'Ground view — wild meadow',
@@ -216,10 +247,11 @@ const categoryData = [
         shortDesc: 'Managed grasslands maintained for livestock grazing, enriched with clover and fodder grasses.',
         desc: 'Managed grasslands maintained for livestock grazing, often enriched with clover and fodder grasses. Pastures may include scattered trees or shrubs but are primarily grass-dominated. They provide fodder, prevent soil erosion, and maintain open landscapes.',
         species: ['Grazing grasses', 'Clover', 'Fodder plants'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Pasture_aerial_view.jpg/640px-Pasture_aerial_view.jpg',
-        img1label: 'Aerial view — managed pasture',
-        img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Cows_in_a_grassy_field.jpg/640px-Cows_in_a_grassy_field.jpg',
-        img2label: 'Livestock grazing',
+        img1: { 
+            src: 'static/images/Pastures-Satellite.png',
+            label: 'Aerial view — managed pasture'
+        },
+        img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Natural_meadow.jpg/640px-Natural_meadow.jpg',
     },
     {
         key: 'permcrops',
@@ -229,8 +261,10 @@ const categoryData = [
         shortDesc: 'Long-term plantations including vineyards, olive groves, and citrus orchards.',
         desc: 'Plantations of long-term crops that remain for several years, including vineyards, olive groves, and citrus orchards. These areas are structurally regular, regularly maintained, and support biodiversity through associated vegetation.',
         species: ['Vitis vinifera', 'Olea europaea', 'Citrus spp.'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Vineyard_aerial.jpg/640px-Vineyard_aerial.jpg',
-        img1label: 'Aerial view — vineyard rows',
+        img1: { 
+            src: 'static/images/Pernament-Crops-Satellite.png',
+            label: 'Aerial view — permanent crops'
+        },
         img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Young-olive-trees.jpg/640px-Young-olive-trees.jpg',
         img2label: 'Olive grove (Olea europaea)',
     },
@@ -242,8 +276,10 @@ const categoryData = [
         shortDesc: 'Areas in ecological succession, transitioning from grassland or shrubland to forest.',
         desc: 'Areas in ecological succession, transitioning from grassland or shrubland to forest. Vegetation includes young trees, shrubs, and pioneer species. These areas are critical for natural landscape regeneration and provide habitat for insects, birds, and small mammals.',
         species: ['Young trees', 'Pioneer shrubs', 'Bushes'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Transitional_woodland_aerial.jpg/640px-Transitional_woodland_aerial.jpg',
-        img1label: 'Aerial view — transitional scrubland',
+        img1: { 
+            src: 'static/images/Transitional-Woodland-Shrub-Satellite.png',
+            label: 'Aerial view — transitional woodland'
+        },
         img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Young_trees_shrubs.jpg/640px-Young_trees_shrubs.jpg',
         img2label: 'Young woodland regrowth',
     },
@@ -255,8 +291,10 @@ const categoryData = [
         shortDesc: 'Cities and towns dominated by buildings, with vegetation limited to parks, gardens, and street trees.',
         desc: 'Built-up urban areas with high-density human structures, where natural vegetation is mostly limited to parks, gardens, and street trees. Visually dominated by buildings, roads, and impervious surfaces.',
         species: ['Park trees', 'Garden plants', 'Street trees'],
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Valletta_aerial.jpg/640px-Valletta_aerial.jpg',
-        img1label: 'Aerial view — urban Valletta',
+        img1: { 
+            src: 'static/images/Urban-Fabric-Satellite.png',
+            label: 'Aerial view — urban fabric'
+        },
         img2: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Malta_urban_street.jpg/640px-Malta_urban_street.jpg',
         img2label: 'Urban street vegetation',
     },
@@ -275,20 +313,28 @@ function imgTag(src, alt, fallbackColour, extraAttrs) {
                  onerror="this.src='https://placehold.co/640x360/${fallbackColour}?text=${encodeURIComponent(alt)}'">`;
 }
 
+function normaliseImg(imgField, labelFallback) {
+    if (imgField && typeof imgField === 'object') {
+        return { src: imgField.src, label: imgField.label || labelFallback || '' };
+    }
+    return { src: imgField || '', label: labelFallback || '' };
+}
+
 // ─── Build the full photo list for the lightbox ───────────────────────────────
 // img1 + img2 are always first; photos[] adds extra slides after them.
 function buildPhotoList(cat) {
-    const fb = fallbacks[cat.type] || fallbacks.natural;
+    const fb  = fallbacks[cat.type] || fallbacks.natural;
+    const i1  = normaliseImg(cat.img1, cat.img1label);
+    const i2  = normaliseImg(cat.img2, cat.img2label);
     const list = [
-        { src: cat.img1, label: cat.img1label, fallback: fb.sat },
-        { src: cat.img2, label: cat.img2label, fallback: fb.gnd },
+        { src: i1.src, label: i1.label, fallback: fb.sat },
+        { src: i2.src, label: i2.label, fallback: fb.gnd },
     ];
     if (Array.isArray(cat.photos)) {
         cat.photos.forEach(p => list.push({ src: p.src, label: p.label, fallback: fb.gnd }));
     }
     return list;
 }
-
 // ─── Lightbox state ───────────────────────────────────────────────────────────
 let _lightboxPhotos  = [];
 let _lightboxIndex   = 0;
@@ -373,23 +419,17 @@ function renderCards() {
 
     grid.innerHTML = categoryData.map(cat => {
         const fb = fallbacks[cat.type] || fallbacks.natural;
+        const i1 = normaliseImg(cat.img1, cat.img1label);
+        const i2 = normaliseImg(cat.img2, cat.img2label);
         return `
         <div class="col-md-6 col-lg-4 cat-item" data-type="${cat.type}">
           <div class="cat-card" onclick="openModal('${cat.key}')">
             <div class="cat-images">
               <div class="img-label" data-label="Satellite">
-                ${imgTag(
-                    typeof cat.img1 === 'object' ? cat.img1.src : cat.img1,
-                    typeof cat.img1 === 'object' ? cat.img1.label : cat.img1label,
-                    fb.sat
-                )}
+                ${imgTag(i1.src, i1.label, fb.sat)}
               </div>
               <div class="img-label" data-label="Ground">
-                ${imgTag(
-                    typeof cat.img2 === 'object' ? cat.img2.src : cat.img2,
-                    typeof cat.img2 === 'object' ? cat.img2.label : cat.img2label,
-                    fb.gnd
-                )}
+                ${imgTag(i2.src, i2.label, fb.gnd)}
               </div>
             </div>
             <div class="cat-body">
@@ -410,9 +450,11 @@ function openModal(key) {
     const cat = categoryData.find(c => c.key === key);
     if (!cat) return;
 
-    const fb         = fallbacks[cat.type] || fallbacks.natural;
-    const photoList  = buildPhotoList(cat);
-    const hasExtras  = Array.isArray(cat.photos) && cat.photos.length > 0;
+    const fb        = fallbacks[cat.type] || fallbacks.natural;
+    const i1        = normaliseImg(cat.img1, cat.img1label);
+    const i2        = normaliseImg(cat.img2, cat.img2label);
+    const photoList = buildPhotoList(cat);
+    const hasExtras = Array.isArray(cat.photos) && cat.photos.length > 0;
 
     document.getElementById('modalTitle').textContent = cat.title;
 
@@ -423,25 +465,18 @@ function openModal(key) {
     document.getElementById('modalDesc').textContent = cat.desc;
 
     document.getElementById('modalImages').innerHTML = `
-    <div>
-        ${imgTag(
-            typeof cat.img1 === 'object' ? cat.img1.src : cat.img1,
-            typeof cat.img1 === 'object' ? cat.img1.label : cat.img1label,
-            fb.sat
-        )}
-    </div>
-    <div>
-        ${imgTag(
-            typeof cat.img2 === 'object' ? cat.img2.src : cat.img2,
-            typeof cat.img2 === 'object' ? cat.img2.label : cat.img2label,
-            fb.gnd
-        )}
-    </div>`;
+        <div>
+            ${imgTag(i1.src, i1.label, fb.sat)}
+            <div class="modal-img-label">${i1.label}</div>
+        </div>
+        <div>
+            ${imgTag(i2.src, i2.label, fb.gnd)}
+            <div class="modal-img-label">${i2.label}</div>
+        </div>`;
 
     document.getElementById('modalSpecies').innerHTML =
         cat.species.map(s => `<span class="species-tag">${s}</span>`).join('');
 
-    // "View all photos" button — only shown when extra photos exist
     const photoBtn = document.getElementById('modalPhotoBtn');
     if (hasExtras) {
         photoBtn.style.display = '';
