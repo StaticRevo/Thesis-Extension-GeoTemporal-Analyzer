@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Home - GeoTemporal Analyzer{% endblock %}
+
+{% block content %}
+<div class="geo-app">
+
+  <!-- Header -->
+  <div class="geo-header">
+    <div class="geo-title">
+      <span class="geo-icon">🛰</span>
+      <div>
+        <h1>GeoTemporal Analyzer</h1>
+        <p class="geo-subtitle">Explore Earth's surface through time using Sentinel-2 imagery</p>
+      </div>
+    </div>
+    <div class="geo-date-badge">
+      <span class="badge-label">VIEWING</span>
+      <span id="displayDate" class="badge-date">—</span>
+      <span id="actualDateNote" class="badge-actual"></span>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div class="map-wrapper">
+    <div id="map"></div>
+
+    <!-- Preview rectangle — positioned by JS -->
+    <div id="previewRect" class="preview-rect">
+      <span class="preview-label">Sentinel-2 preview area</span>
+    </div>
+
+    <!-- Confirm button — positioned by JS below the rect -->
+    <button id="confirmBtn" class="confirm-btn">Load Sentinel imagery</button>
+
+    <!-- Loading overlay inside map -->
+    <div id="loadingOverlay" class="map-loading" style="display:none">
+      <div class="loader-inner">
+        <div class="spinner-ring"></div>
+        <span id="loadingStatus">Fetching imagery…</span>
+      </div>
+    </div>
+
+    <!-- No-image notice -->
+    <div id="noImageNotice" class="no-image-notice" style="display:none">
+      ⚠ No clear imagery found near this date
+    </div>
+
+    <!-- Zoom level indicator -->
+    <div id="zoomIndicator" class="zoom-indicator">
+      <span id="zoomLevel">Z10</span>
+      <span id="zoomLabel">Regional view</span>
+    </div>
+  </div>
+
+  <!-- Timeline Controls -->
+  <div class="timeline-panel">
+    <button id="playBtn" class="play-btn" title="Auto-play">▶</button>
+
+    <div class="timeline-track-wrapper">
+      <!-- Year labels -->
+      <div class="year-labels" id="yearLabels"></div>
+      <!-- The slider -->
+      <input type="range" id="timelineSlider" class="timeline-slider" min="0" value="0">
+      <!-- Tick marks -->
+      <div class="timeline-ticks" id="timelineTicks"></div>
+    </div>
+
+    <div class="speed-control">
+      <label>Speed</label>
+      <select id="speedSelect">
+        <option value="2000">Slow</option>
+        <option value="1200" selected>Normal</option>
+        <option value="600">Fast</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="speed-control">
+    <label>Opacity</label>
+    <input type="range" id="opacitySlider" min="0" max="1" step="0.05" value="0.9" style="width:80px">
+  </div>
+
+  <p class="map-hint">Pan the map to your area of interest, then press Load Sentinel imagery</p>
+
+</div>
+{% endblock %}

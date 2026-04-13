@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Land Use Categories - GeoTemporal Analyzer{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/categories.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="cat-hero">
+  <div class="container">
+    <h1>🗂 Land Use Categories</h1>
+    <p>19 classification categories used for Sentinel-2 satellite imagery analysis. Each category describes a distinct land cover type found across Mediterranean landscapes.</p>
+  </div>
+</div>
+
+<div class="container pb-5">
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterCats('all', this)">All (19)</button>
+    <button class="filter-btn" onclick="filterCats('natural', this)">🌿 Natural</button>
+    <button class="filter-btn" onclick="filterCats('agriculture', this)">🌾 Agriculture</button>
+    <button class="filter-btn" onclick="filterCats('urban', this)">🏙️ Urban</button>
+    <button class="filter-btn" onclick="filterCats('water', this)">💧 Water</button>
+  </div>
+
+  <!-- Cards injected here by categories.js -->
+  <div class="row g-4" id="catGrid"></div>
+
+</div>
+
+
+<!-- ── Card modal ────────────────────────────────────────────────────────── -->
+<div class="modal fade" id="catModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle"></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-images" id="modalImages"></div>
+        <span id="modalBadge" class="cat-badge mb-2 d-inline-block"></span>
+        <p id="modalDesc" style="color:#adb5bd; font-size:0.88rem; line-height:1.7;"></p>
+        <h6 style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.5rem;">Key species</h6>
+        <div id="modalSpecies" class="species-list"></div>
+      </div>
+      <div class="modal-footer">
+        <!-- Hidden until a category has extra photos -->
+        <button id="modalPhotoBtn" type="button" class="btn btn-outline-secondary btn-sm me-auto" style="display:none;">
+          🖼 View all photos
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── Lightbox modal ────────────────────────────────────────────────────── -->
+<div class="modal fade" id="lightboxModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered lightbox-dialog">
+    <div class="modal-content lightbox-content">
+
+      <div class="lightbox-header">
+        <span id="lightboxTitle" class="lightbox-title"></span>
+        <span id="lightboxCounter" class="lightbox-counter"></span>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="lightbox-stage">
+        <button id="lightboxPrev" class="lightbox-arrow lightbox-arrow--left" onclick="lightboxPrev()" aria-label="Previous">
+          &#8249;
+        </button>
+
+        <div class="lightbox-img-wrap">
+          <img id="lightboxImg" src="" alt="" class="lightbox-img">
+        </div>
+
+        <button id="lightboxNext" class="lightbox-arrow lightbox-arrow--right" onclick="lightboxNext()" aria-label="Next">
+          &#8250;
+        </button>
+      </div>
+
+      <div class="lightbox-footer">
+        <span id="lightboxCaption" class="lightbox-caption"></span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script src="{{ url_for('static', filename='js/categories.js') }}"></script>
+{% endblock %}

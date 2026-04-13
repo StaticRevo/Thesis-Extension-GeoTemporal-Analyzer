@@ -1261,7 +1261,61 @@ def predict_from_map():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# !!!!-- MERGED WEBSITE -- !!!!--
+
+# -- Categories Page ---
+@app.route("/categories")
+def categories():
+    return render_template("categories.html")
+
+@app.route('/api/category-images')
+def category_images():
+    images_dir = os.path.join(app.static_folder, 'images')
+    manifest = {}
+    if os.path.exists(images_dir):
+        for folder in os.listdir(images_dir):
+            folder_path = os.path.join(images_dir, folder)
+            if not os.path.isdir(folder_path):
+                continue
+            image_files = sorted([
+                f for f in os.listdir(folder_path)
+                if f.lower().endswith(('.jpg', '.jpeg', '.png', '.webp', '.tif', '.tiff'))
+            ])
+            photos = [
+                {'src': f'/static/images/{folder}/{f}',
+                 'label': os.path.splitext(f)[0].replace('_', ' ').replace('-', ' ')}
+                for f in image_files
+            ]
+            manifest[folder] = {
+                'img1': photos[0] if len(photos) > 0 else None,
+                'img2': photos[1] if len(photos) > 1 else None,
+                'photos': photos[2:] if len(photos) > 2 else []
+            }
+    return jsonify(manifest)
+
+@app.route("/get_temporal_image", methods=["GET"])
+def get_temporal_image():
+    lat = request.args.get("lat", "40.7128")
+    lon = request.args.get("lon", "-74.0060")
+    date = request.args.get("date")
+    bbox = request.args.get("bbox") 
+
+    if not date:
+        return jsonify({"error": "date parameter required"}), 400
+
+    result = get_tile_url(lat, lon, date, bbox)
+
+    if result is None:
+        return jsonify({"tile_url": None, "actual_date": None})
+
+    return jsonify(result)  
+
+
+@app.route("/temporal_analyser.html")
+def temporal_analyser():
+    return render_template("temporal_analyser.html")
+
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=5001, debug=True)
 
 
