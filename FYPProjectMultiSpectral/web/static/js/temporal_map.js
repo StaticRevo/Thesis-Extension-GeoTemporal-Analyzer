@@ -148,7 +148,7 @@ function loadSentinelImage(date, lat = null, lon = null) {
                 sentinelLayer = null;
             }
 
-            if (!data.tile_url) {
+            if (!data.tile_url) { 
                 document.getElementById('noImageNotice').style.display = 'block';
                 hideLoading();
                 return;

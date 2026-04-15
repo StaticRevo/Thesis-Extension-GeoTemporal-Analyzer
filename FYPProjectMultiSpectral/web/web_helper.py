@@ -34,6 +34,11 @@ from utils.data_utils import get_band_indices
 from transformations.transforms import TransformsConfig
 from utils.test_utils import get_target_layer
 
+try:
+    ee.Initialize(project='geo-time-viewer')
+except Exception as exc:
+    print(f"Warning: Earth Engine initialization failed: {exc}")
+
 EXPERIMENTS_DIR = DatasetConfig.experiment_path
 STATIC_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 

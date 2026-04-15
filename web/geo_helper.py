@@ -1,6 +1,6 @@
 import ee
 
-def get_tile_url(lat, lon, date, bbox=None):  # ← add bbox param
+def get_tile_url(lat, lon, date, bbox=None):  
     try:
         # ── Region: use bbox if provided, otherwise buffer the point ──
         if bbox:

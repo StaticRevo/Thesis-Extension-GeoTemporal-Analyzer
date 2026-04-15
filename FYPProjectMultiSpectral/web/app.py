@@ -7,6 +7,7 @@ import secrets
 import subprocess
 from datetime import datetime
 import glob
+import ee
 
 # Directory set-up
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -44,6 +45,9 @@ _cached_testing_log = None
 _last_testing_log_time = 0
 
 CACHE_DURATION = 5
+
+# Initialize Earth Engine
+ee.Initialize(project='geo-time-viewer')
 
 # Configure upload and static folders
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
@@ -1293,6 +1297,10 @@ def category_images():
             }
     return jsonify(manifest)
 
+@app.route("/temporal_analyser.html")
+def temporal_analyser():
+    return render_template("temporal_analyser.html")
+
 @app.route("/get_temporal_image", methods=["GET"])
 def get_temporal_image():
     lat = request.args.get("lat", "40.7128")
@@ -1310,10 +1318,6 @@ def get_temporal_image():
 
     return jsonify(result)  
 
-
-@app.route("/temporal_analyser.html")
-def temporal_analyser():
-    return render_template("temporal_analyser.html")
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5001, debug=True)

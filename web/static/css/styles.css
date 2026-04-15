@@ -267,6 +267,7 @@
     margin-top: 2px;
 }
 
+/* ── Categories ── */
 .cat-hero {
     background: linear-gradient(135deg, #1a2332 0%, #0d1b2a 100%);
     border-bottom: 1px solid rgba(255,255,255,0.08);
@@ -401,6 +402,7 @@
     text-align: center;
     margin-top: 3px;
 }
+
 /* ── Lightbox ────────────────────────────────────────────────────────────── */
 .lightbox-dialog  { max-width: 92vw; }
 .lightbox-content {
